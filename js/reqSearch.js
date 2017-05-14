@@ -1,6 +1,6 @@
 import {viewResult} from './reqVideo';
 import {changeNumberOfPages} from './changeNumberOfPages';
-import {getDataFromYoutube} from './customFetch';
+import {getYouTubeApi} from './fetchFunc';
 
 export function req(pages, resultDiv, search, obj) {
     const url = "https://www.googleapis.com/youtube/v3/search";
@@ -38,7 +38,7 @@ export function req(pages, resultDiv, search, obj) {
       alert(error.message);
     }
 
-    getDataFromYoutube(url, params, responseHandler, errorHandler);
+    getYouTubeApi(url, params, responseHandler, errorHandler);
 
     return obj;
 }

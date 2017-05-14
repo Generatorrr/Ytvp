@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 9);
+/******/ 	return __webpack_require__(__webpack_require__.s = 8);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -100,11 +100,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.req = req;
 
-var _reqVideo = __webpack_require__(10);
+var _reqVideo = __webpack_require__(9);
 
 var _changeNumberOfPages = __webpack_require__(2);
 
-var _customFetch = __webpack_require__(3);
+var _fetchFunc = __webpack_require__(3);
 
 function req(pages, resultDiv, search, obj) {
     var url = "https://www.googleapis.com/youtube/v3/search";
@@ -142,7 +142,7 @@ function req(pages, resultDiv, search, obj) {
         alert(error.message);
     };
 
-    (0, _customFetch.getDataFromYoutube)(url, params, responseHandler, errorHandler);
+    (0, _fetchFunc.getYouTubeApi)(url, params, responseHandler, errorHandler);
 
     return obj;
 }
@@ -180,8 +180,8 @@ function changeNumberOfPages(pages, previousNumberOfPages, numberOfPages) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.getDataFromYoutube = getDataFromYoutube;
-function customFetch(url) {
+exports.getYouTubeApi = getYouTubeApi;
+function fetchFunc(url) {
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
     if (options.queryParams) {
@@ -198,8 +198,8 @@ function queryParams(params) {
     }).join('&');
 }
 
-function getDataFromYoutube(url, params, youtubeResponseHandler, errorHandler) {
-    customFetch(url, params).then(function (r) {
+function getYouTubeApi(url, params, youtubeResponseHandler, errorHandler) {
+    fetchFunc(url, params).then(function (r) {
         return r.json();
     }).then(youtubeResponseHandler).catch(errorHandler);
 }
@@ -302,7 +302,7 @@ function addSearchListener(search, resultDiv, pages, obj) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.swipe = undefined;
+exports.swipe = swipe;
 
 var _changePage = __webpack_require__(0);
 
@@ -311,13 +311,14 @@ function swipe(wrapper, pages, resultDiv, search, obj) {
         mousedownX = 0;
 
     var moveHandler = function moveHandler(e) {
-        resultDiv.style.left = parseInt(resultDiv.style.left, 10) + (e.pageX - mousedownX) + 'px';
-        mousedownX = e.pageX;
+        var clientX = e.clientX || (e.touches.length ? e.touches[0].clientX : null);
+        resultDiv.style.left = parseInt(resultDiv.style.left, 10) + (clientX - mousedownX) + 'px';
+        mousedownX = clientX;
     };
 
     var mouseUpHandler = function mouseUpHandler(e) {
         pages.childNodes[obj.currentPage - 1].classList.remove('active');
-        resultDiv.style.transition = 'left 2s';
+        resultDiv.style.transition = 'left 0.5s';
         var changePosition = resultDivPostionX - parseInt(resultDiv.style.left, 10);
         if (changePosition > obj.chageForSwipe) {
             obj.currentPage++;
@@ -333,58 +334,15 @@ function swipe(wrapper, pages, resultDiv, search, obj) {
     };
 
     wrapper.addEventListener('mousedown', function (e) {
-        mousedownX = e.pageX;
+        mousedownX = e.clientX;
         resultDivPostionX = parseInt(resultDiv.style.left);
         resultDiv.style.transition = 'left .1s';
         wrapper.addEventListener('mousemove', moveHandler);
         wrapper.addEventListener('mouseup', mouseUpHandler);
     });
-}
-
-exports.swipe = swipe;
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.swipeTouch = undefined;
-
-var _changePage = __webpack_require__(0);
-
-function swipeTouch(wrapper, pages, resultDiv, search, obj) {
-    var resultDivPostionX = 0,
-        mousedownX = 0;
-
-    var moveHandler = function moveHandler(e) {
-        resultDiv.style.left = parseInt(resultDiv.style.left, 10) + (e.pageX - mousedownX) + 'px';
-        mousedownX = e.pageX;
-    };
-
-    var mouseUpHandler = function mouseUpHandler(e) {
-        pages.childNodes[obj.currentPage - 1].classList.remove('active');
-        resultDiv.style.transition = 'left 2s';
-        var changePosition = resultDivPostionX - parseInt(resultDiv.style.left, 10);
-        if (changePosition > obj.chageForSwipe) {
-            obj.currentPage++;
-        } else if (changePosition < -obj.chageForSwipe) {
-            if (obj.currentPage > 1) {
-                obj.currentPage--;
-            }
-        }
-        (0, _changePage.changePage)(obj.currentPage, pages, resultDiv, search, obj);
-        mousedownX = 0;
-        wrapper.removeEventListener('touchmove', moveHandler);
-        wrapper.removeEventListener('touchend', mouseUpHandler);
-    };
 
     wrapper.addEventListener('touchstart', function (e) {
-        mousedownX = e.pageX;
+        mousedownX = e.touches[0].clientX;
         resultDivPostionX = parseInt(resultDiv.style.left);
         resultDiv.style.transition = 'left .1s';
         wrapper.addEventListener('touchmove', moveHandler);
@@ -392,10 +350,8 @@ function swipeTouch(wrapper, pages, resultDiv, search, obj) {
     });
 }
 
-exports.swipeTouch = swipeTouch;
-
 /***/ }),
-/* 9 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -412,8 +368,6 @@ var _pageListener = __webpack_require__(5);
 var _changePage = __webpack_require__(0);
 
 var _swipeListener = __webpack_require__(7);
-
-var _swipeTouchListener = __webpack_require__(8);
 
 var _changeNumberOfPages = __webpack_require__(2);
 
@@ -477,7 +431,6 @@ window.onload = function () {
     obj.currentPage = (0, _pageListener.pageListener)(_elements.pages, _elements.resultDiv, _elements.search, obj);
 
     (0, _swipeListener.swipe)(_elements.wrapper, _elements.pages, _elements.resultDiv, _elements.search, obj);
-    (0, _swipeTouchListener.swipeTouch)(_elements.wrapper, _elements.pages, _elements.resultDiv, _elements.search, obj);
 
     window.onresize = function () {
         var previousNumberOfPages = obj.numberOfPages;
@@ -492,7 +445,7 @@ window.onload = function () {
 };
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -503,7 +456,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.viewResult = viewResult;
 
-var _customFetch = __webpack_require__(3);
+var _fetchFunc = __webpack_require__(3);
 
 function viewResult(item, number, resultDiv) {
     var url = "https://www.googleapis.com/youtube/v3/videos";
@@ -527,7 +480,7 @@ function viewResult(item, number, resultDiv) {
     var errorHandler = function errorHandler(error) {
         alert(error.message);
     };
-    (0, _customFetch.getDataFromYoutube)(url, params, responseHandler, errorHandler);
+    (0, _fetchFunc.getYouTubeApi)(url, params, responseHandler, errorHandler);
 }
 
 /***/ })

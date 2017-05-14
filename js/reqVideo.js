@@ -1,4 +1,4 @@
-import {getDataFromYoutube} from './customFetch';
+import {getYouTubeApi} from './fetchFunc';
 
 export function viewResult(item, number, resultDiv) {
     const url = "https://www.googleapis.com/youtube/v3/videos";
@@ -38,5 +38,5 @@ export function viewResult(item, number, resultDiv) {
     const errorHandler = function(error) {
         alert(error.message);
     }
-    getDataFromYoutube(url, params, responseHandler, errorHandler);
+    getYouTubeApi(url, params, responseHandler, errorHandler);
 }

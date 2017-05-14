@@ -86,6 +86,10 @@ body {
     width: 300px;
 }
 
+.information {
+    overflow-wrap: break-word;
+}
+
 #result .item .information {
     width: 250px;
     margin: 0 auto;

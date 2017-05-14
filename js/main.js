@@ -4,7 +4,6 @@ import {req} from './reqSearch';
 import {pageListener} from './pageListener';
 import {changePage} from './changePage';
 import {swipe} from './swipeListener';
-import {swipeTouch} from './swipeTouchListener';
 import {changeNumberOfPages} from './changeNumberOfPages';
 
 window.onload = () => {
@@ -66,8 +65,7 @@ window.onload = () => {
 
     obj.currentPage = pageListener(pages, resultDiv, search, obj);
 
-    swipe(wrapper, pages, resultDiv, search, obj);
-    swipeTouch(document.body, pages, resultDiv, search, obj);    
+    swipe(wrapper, pages, resultDiv, search, obj); 
 
     window.onresize = () => {
         const previousNumberOfPages = obj.numberOfPages;
