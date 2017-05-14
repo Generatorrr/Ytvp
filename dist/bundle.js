@@ -477,6 +477,7 @@ window.onload = function () {
     obj.currentPage = (0, _pageListener.pageListener)(_elements.pages, _elements.resultDiv, _elements.search, obj);
 
     (0, _swipeListener.swipe)(_elements.wrapper, _elements.pages, _elements.resultDiv, _elements.search, obj);
+    (0, _swipeTouchListener.swipeTouch)(_elements.wrapper, _elements.pages, _elements.resultDiv, _elements.search, obj);
 
     window.onresize = function () {
         var previousNumberOfPages = obj.numberOfPages;
