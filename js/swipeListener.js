@@ -34,11 +34,11 @@ export function swipe(wrapper, pages, resultDiv, search, obj) {
         wrapper.addEventListener('mouseup', mouseUpHandler); 
     }); 
 
-    document.body.addEventListener('touchstart', function(e) { 
+    wrapper.addEventListener('touchstart', function(e) { 
         mousedownX = e.touches[0].clientX; 
         resultDivPostionX = parseInt(resultDiv.style.left); 
         resultDiv.style.transition = 'left .1s'; 
-        document.body.addEventListener('touchmove', moveHandler); 
-        document.body.addEventListener('touchend', mouseUpHandler); 
+        wrapper.addEventListener('touchmove', moveHandler); 
+        wrapper.addEventListener('touchend', mouseUpHandler); 
     }); 
 }

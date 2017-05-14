@@ -65,7 +65,7 @@ window.onload = () => {
 
     obj.currentPage = pageListener(pages, resultDiv, search, obj);
 
-    swipe(wrapper, pages, resultDiv, search, obj); 
+    swipe(document.body, pages, resultDiv, search, obj); 
 
     window.onresize = () => {
         const previousNumberOfPages = obj.numberOfPages;
