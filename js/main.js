@@ -4,6 +4,7 @@ import {req} from './reqSearch';
 import {pageListener} from './pageListener';
 import {changePage} from './changePage';
 import {swipe} from './swipeListener';
+import {swipeTouch} from './swipeTouchListener';
 import {changeNumberOfPages} from './changeNumberOfPages';
 
 window.onload = () => {
